@@ -34,7 +34,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1043, 523);
+            ClientSize = new Size(1904, 1041);
             Name = "FormMain";
             Text = "Multiplication";
             ResumeLayout(false);
