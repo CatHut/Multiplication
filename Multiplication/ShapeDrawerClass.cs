@@ -14,6 +14,11 @@ namespace CatHut
         private List<Shape> shapes = new List<Shape>();
 
         /// <summary>
+        /// 登録されている図形のリストを取得します。
+        /// </summary>
+        public List<Shape> Shapes => shapes;
+
+        /// <summary>
         /// 描画する図形を追加します。
         /// </summary>
         /// <param name="shape">描画する図形のオブジェクト。</param>
@@ -42,9 +47,5 @@ namespace CatHut
             }
         }
 
-        /// <summary>
-        /// 登録されている図形のリストを取得します。
-        /// </summary>
-        public List<Shape> Shapes => shapes;
     }
 }

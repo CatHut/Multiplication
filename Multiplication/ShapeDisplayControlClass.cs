@@ -8,7 +8,6 @@ using CatHut;
 
 namespace Multiplication
 {
-
     /// <summary>
     /// 表示モードを定義する列挙型です。
     /// </summary>
@@ -23,27 +22,65 @@ namespace Multiplication
     /// <summary>
     /// 図形と数字の表示切り替えを行うクラスです。
     /// </summary>
-    public class ShapeDisplayControl
+    public class ShapeDisplayControlClass
     {
         private ShapeDrawerClass shapeDrawer;
         private Label numberLabel;
         private Form form;
+        private Point baseLocation; // 基準位置
 
         /// <summary>
-        /// ShapeDisplayControlクラスの新しいインスタンスを初期化します。
+        /// ShapeDisplayControlの基準位置を設定または取得します。
+        /// </summary>
+        public Point BaseLocation
+        {
+            get => baseLocation;
+            set
+            {
+                baseLocation = value;
+                UpdateChildControls(); // 子要素の位置を更新
+            }
+        }
+
+        /// <summary>
+        /// ShapeDisplayControlClassの新しいインスタンスを初期化します。
         /// </summary>
         /// <param name="form">描画を行うフォームのインスタンスです。</param>
-        public ShapeDisplayControl(Form form)
+        public ShapeDisplayControlClass(Form form)
         {
             this.form = form;
             this.shapeDrawer = new ShapeDrawerClass();
             this.numberLabel = new Label
             {
                 AutoSize = true,
-                Location = new Point(150, 150), // ラベルの位置は適宜調整してください。
+                Location = new Point(0, 0), // 初期位置
                 Font = new Font("Arial", 24, FontStyle.Bold)
             };
             this.form.Controls.Add(this.numberLabel);
+            this.BaseLocation = new Point(0, 0); // 初期基準位置
+        }
+
+        /// <summary>
+        /// ShapeDisplayControlClassの新しいインスタンスを初期化し、基準位置を指定します。
+        /// </summary>
+        /// <param name="form">描画を行うフォームのインスタンスです。</param>
+        /// <param name="baseLocation">このコントロールの基準位置です。</param>
+        public ShapeDisplayControlClass(Form form, Point baseLocation) : this(form)
+        {
+            this.BaseLocation = baseLocation;
+        }
+
+        /// <summary>
+        /// 子要素の位置を更新します。
+        /// </summary>
+        private void UpdateChildControls()
+        {
+            foreach (var shape in shapeDrawer.Shapes)
+            {
+                shape.Location = new Point(baseLocation.X + shape.Location.X, baseLocation.Y + shape.Location.Y);
+            }
+            numberLabel.Location = new Point(baseLocation.X, baseLocation.Y);
+            form.Invalidate(); // 画面を再描画
         }
 
         /// <summary>
@@ -59,32 +96,37 @@ namespace Multiplication
             switch (mode)
             {
                 case DisplayMode.A:
-                    // 上下の三角形と四角枠を追加
-                    shapeDrawer.AddShape(new Triangle(new Point(100, 100), new Size(50, 50), false, TriangleDirection.Up));
-                    shapeDrawer.AddShape(new Triangle(new Point(100, 150), new Size(50, 50), false, TriangleDirection.Down));
-                    shapeDrawer.AddShape(new CatHut.Rectangle(new Point(100, 100), new Size(50, 100), false));
+                    shapeDrawer.AddShape(new Triangle(new Point(0, 0), new Size(50, 50), false, TriangleDirection.Up));
+                    shapeDrawer.AddShape(new Triangle(new Point(0, 50), new Size(50, 50), false, TriangleDirection.Down));
+                    shapeDrawer.AddShape(new CatHut.Rectangle(new Point(0, 0), new Size(50, 100), false));
                     numberLabel.Text = number;
                     numberLabel.Visible = true;
                     break;
                 case DisplayMode.B:
-                    // 四角枠を追加
-                    shapeDrawer.AddShape(new CatHut.Rectangle(new Point(100, 100), new Size(50, 100), false));
+                    shapeDrawer.AddShape(new CatHut.Rectangle(new Point(0, 0), new Size(50, 100), false));
                     numberLabel.Text = number;
                     numberLabel.Visible = true;
                     break;
                 case DisplayMode.C:
-                    // 四角枠のみを追加
-                    shapeDrawer.AddShape(new CatHut.Rectangle(new Point(100, 100), new Size(50, 100), false));
+                    shapeDrawer.AddShape(new CatHut.Rectangle(new Point(0, 0), new Size(50, 100), false));
                     break;
                 case DisplayMode.D:
-                    // 数字のみ表示
                     numberLabel.Text = number;
                     numberLabel.Visible = true;
                     break;
             }
 
-            form.Invalidate(); // 描画を更新
+            UpdateChildControls(); // 子要素の位置を更新
         }
-    }
 
+        /// <summary>
+        /// 図形を追加します。
+        /// </summary>
+        /// <param name="shape">追加する図形。</param>
+        public void AddShape(Shape shape)
+        {
+            shapeDrawer.AddShape(shape);
+        }
+
+    }
 }
