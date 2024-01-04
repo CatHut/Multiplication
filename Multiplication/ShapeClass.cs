@@ -47,32 +47,59 @@ namespace CatHut
 
 
     /// <summary>
-    /// 三角形を表すクラス。
+    /// 図形の向きを表す列挙型です。
+    /// </summary>
+    public enum TriangleDirection
+    {
+        /// <summary>上向きの三角形。</summary>
+        Up,
+        /// <summary>下向きの三角形。</summary>
+        Down
+    }
+
+    /// <summary>
+    /// 三角形を表すクラスで、Shapeから派生しています。
     /// </summary>
     public class Triangle : Shape
     {
+        /// <summary>三角形の向きを取得または設定します。</summary>
+        public TriangleDirection Direction { get; set; }
+
         /// <summary>
-        /// 三角形のインスタンスを初期化します。
+        /// Triangleクラスの新しいインスタンスを初期化します。
         /// </summary>
-        /// <param name="location">三角形の位置</param>
-        /// <param name="size">三角形のサイズ</param>
-        /// <param name="isFilled">三角形が塗りつぶされるかどうか</param>
-        public Triangle(Point location, Size size, bool isFilled)
-            : base(location, size, isFilled, true) { }
+        /// <param name="location">三角形の位置を指定するPoint。</param>
+        /// <param name="size">三角形のサイズを指定するSize。</param>
+        /// <param name="isFilled">三角形が塗りつぶされるかどうかを指定します。</param>
+        /// <param name="direction">三角形の向きを指定するTriangleDirection。</param>
+        public Triangle(Point location, Size size, bool isFilled, TriangleDirection direction)
+            : base(location, size, isFilled, true)
+        {
+            Direction = direction;
+        }
 
         /// <summary>
         /// 三角形を描画します。
         /// </summary>
-        /// <param name="g">描画に使用するGraphicsオブジェクト</param>
+        /// <param name="g">描画に使用するGraphicsオブジェクト。</param>
         public override void Draw(Graphics g)
         {
             if (!IsVisible) return;
 
-            Point[] points = new Point[3];
-            points[0] = new Point(Location.X + Size.Width / 2, Location.Y);
-            points[1] = new Point(Location.X, Location.Y + Size.Height);
-            points[2] = new Point(Location.X + Size.Width, Location.Y + Size.Height);
+            // 三角形の頂点を計算
+            Point[] points = Direction == TriangleDirection.Up
+                ? new Point[] {
+                new Point(Location.X + Size.Width / 2, Location.Y),
+                new Point(Location.X, Location.Y + Size.Height),
+                new Point(Location.X + Size.Width, Location.Y + Size.Height)
+                }
+                : new Point[] {
+                new Point(Location.X, Location.Y),
+                new Point(Location.X + Size.Width, Location.Y),
+                new Point(Location.X + Size.Width / 2, Location.Y + Size.Height)
+                };
 
+            // 三角形の描画
             if (IsFilled)
                 g.FillPolygon(Brushes.Black, points);
             else
