@@ -37,6 +37,8 @@
             ClientSize = new Size(1904, 1041);
             Name = "FormMain";
             Text = "Multiplication";
+            FormClosing += FormMain_FormClosing;
+            Load += FormMain_Load;
             ResumeLayout(false);
         }
 

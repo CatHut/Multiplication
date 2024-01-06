@@ -15,15 +15,30 @@ namespace Multiplication
         public int AnswerValue { get; private set; }
         public HiddenValueType HiddenValue { get; private set; }
 
-        public QuestionClass()
+        public QuestionClass(int first, int second)
         {
-            GenerateQuestion();
+            GenerateQuestion(first, second);
         }
 
-        private void GenerateQuestion()
+        private void GenerateQuestion(int first, int second)
         {
-            // 質問の生成と隠す値の決定をここで行います。
-            // 空の定義としておきます。
+            FirstValue = first;
+            SecondValue = second;
+            AnswerValue = FirstValue * SecondValue;
+            HiddenValue = GetRandomHiddenValueType();
+
+            HiddenValue = HiddenValueType.ANSWER_VALUE;
+        }
+
+        /// <summary>
+        /// HiddenValueType enumからランダムな値を取得します。
+        /// </summary>
+        /// <returns>HiddenValueType enumからランダムに選ばれた値。</returns>
+        public static HiddenValueType GetRandomHiddenValueType()
+        {
+            Random random = new Random();
+            HiddenValueType[] values = (HiddenValueType[])Enum.GetValues(typeof(HiddenValueType));
+            return values[random.Next(values.Length)];
         }
 
         public bool CheckAnswer(int userAnswer)

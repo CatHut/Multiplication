@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 using CatHut;
@@ -13,10 +14,11 @@ namespace Multiplication
     /// </summary>
     public enum DisplayMode
     {
-        A,
-        B,
-        C,
-        D
+        A, //入力フォーカス
+        B, //入力済
+        C, //入力待ち
+        D, //数値のみ
+        E //何も表示しない
     }
 
     /// <summary>
@@ -28,6 +30,7 @@ namespace Multiplication
         private Label numberLabel;
         private Form form;
         private Point baseLocation; // 基準位置
+        private Point labelBaseLocation = new Point(15, 10); // 初期位置
 
         /// <summary>
         /// ShapeDisplayControlの基準位置を設定または取得します。
@@ -52,9 +55,12 @@ namespace Multiplication
             this.shapeDrawer = new ShapeDrawerClass();
             this.numberLabel = new Label
             {
-                AutoSize = true,
-                Location = new Point(0, 0), // 初期位置
-                Font = new Font("Arial", 24, FontStyle.Bold)
+                AutoSize = false,
+                Location = labelBaseLocation, // 初期位置
+                Font = new Font("Arial", 130, FontStyle.Bold),
+                BorderStyle = BorderStyle.FixedSingle,
+                Size = new Size(100, 180),
+                TextAlign = ContentAlignment.MiddleCenter
             };
             this.form.Controls.Add(this.numberLabel);
             this.BaseLocation = new Point(0, 0); // 初期基準位置
@@ -79,7 +85,9 @@ namespace Multiplication
             {
                 shape.Location = new Point(baseLocation.X + shape.Location.X, baseLocation.Y + shape.Location.Y);
             }
-            numberLabel.Location = new Point(baseLocation.X, baseLocation.Y);
+
+            numberLabel.Location = labelBaseLocation;
+            numberLabel.Location = new Point(baseLocation.X + numberLabel.Location.X, baseLocation.Y + numberLabel.Location.Y);
             form.Invalidate(); // 画面を再描画
         }
 
@@ -87,32 +95,35 @@ namespace Multiplication
         /// 指定された表示モードに応じて図形と数字の表示を切り替えます。
         /// </summary>
         /// <param name="mode">表示モードを指定するDisplayMode列挙型です。</param>
-        /// <param name="number">表示する数字です。</param>
-        public void SetDisplayMode(DisplayMode mode, string number)
+        /// <param name="str">表示する数字です。</param>
+        public void SetDisplay(DisplayMode mode, int number)
         {
             shapeDrawer.ClearShapes(); // 現在の図形をすべてクリア
             numberLabel.Visible = false; // ラベルを非表示に設定
-
+            var str = number.ToString();
             switch (mode)
             {
                 case DisplayMode.A:
-                    shapeDrawer.AddShape(new Triangle(new Point(0, 0), new Size(50, 50), false, TriangleDirection.Up));
-                    shapeDrawer.AddShape(new Triangle(new Point(0, 50), new Size(50, 50), false, TriangleDirection.Down));
-                    shapeDrawer.AddShape(new CatHut.Rectangle(new Point(0, 0), new Size(50, 100), false));
-                    numberLabel.Text = number;
+                    shapeDrawer.AddShape(new Triangle(new Point(35, -70), new Size(50, 30), false, TriangleDirection.Down)); //上部矢印
+                    shapeDrawer.AddShape(new Triangle(new Point(35, 220), new Size(50, 30), false, TriangleDirection.Up)); //下部矢印
+                    shapeDrawer.AddShape(new CatHut.Rectangle(new Point(0, 0), new Size(120, 200), false));
+                    numberLabel.Text = str;
                     numberLabel.Visible = true;
                     break;
                 case DisplayMode.B:
                     shapeDrawer.AddShape(new CatHut.Rectangle(new Point(0, 0), new Size(50, 100), false));
-                    numberLabel.Text = number;
+                    numberLabel.Text = str;
                     numberLabel.Visible = true;
                     break;
                 case DisplayMode.C:
                     shapeDrawer.AddShape(new CatHut.Rectangle(new Point(0, 0), new Size(50, 100), false));
                     break;
                 case DisplayMode.D:
-                    numberLabel.Text = number;
+                    numberLabel.Text = str;
                     numberLabel.Visible = true;
+                    break;
+                case DisplayMode.E:
+                    //何もしない
                     break;
             }
 
@@ -126,6 +137,11 @@ namespace Multiplication
         public void AddShape(Shape shape)
         {
             shapeDrawer.AddShape(shape);
+        }
+
+        public void Draw(Graphics g)
+        {
+            shapeDrawer.Draw(g);
         }
 
     }

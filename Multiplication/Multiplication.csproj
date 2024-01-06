@@ -8,4 +8,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Include="..\..\CatHutLib\CatHutLib\CatHutLib\Common\SerializableDictionary.cs" Link="SerializableDictionary\SerializableDictionary.cs" />
+    <Compile Include="..\..\CatHutLib\CatHutLib\CatHutLib\Common\SerializableKeyValuePair.cs" Link="SerializableDictionary\SerializableKeyValuePair.cs" />
+    <Compile Include="..\..\CatHutLib\CatHutLib\CatHutLib\Common\SerializableSortedDictionary.cs" Link="SerializableDictionary\SerializableSortedDictionary.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="SerializableDictionary\" />
+  </ItemGroup>
+
 </Project>
