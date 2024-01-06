@@ -8,6 +8,7 @@ namespace Multiplication
         private DisplayControlClass displayControlClass;
         private AppSetting<AnswerDataClass> AS;
         private QuestionSetClass questionSetClass;
+        private Button nextButton;
 
 
         public FormMain()
@@ -26,16 +27,17 @@ namespace Multiplication
                 AS.Data.Initialize(); 
             }
 
-            //問題の生成
-            {
-                questionSetClass = new QuestionSetClass(90, 99);
-
-            }
-
             //問題表示用のアイテム追加
             {
                 displayControlClass = new DisplayControlClass(this);
             }
+
+            //問題の生成
+            {
+                questionSetClass = new QuestionSetClass(1, 12, displayControlClass);
+            }
+
+
 
 
             //回答用の数字ボタン追加
@@ -80,6 +82,25 @@ namespace Multiplication
             {
                 var question = questionSetClass.GetNextQuestion();
                 displayControlClass.RefreshQuestion(question);
+            }
+
+
+            //次の問題遷移待ちPictureBox
+            {
+                int xOffset = 10; // 初期のXオフセット
+                int yOffset = 500; // Yオフセット（変更可能）
+
+                // 透明なPictureBoxの作成
+                nextButton = new Button
+                {
+                    Visible = false,  // 初期状態では非表示
+                    Size = new Size(1920, 120), // ボタンのサイズ（変更可能）
+                    Location = new Point(xOffset, yOffset),
+                    Text = "Next!"
+                };
+                nextButton.Click += nextButton_Click;
+                this.Controls.Add(nextButton);
+                nextButton.BringToFront();
 
             }
         }
@@ -92,9 +113,17 @@ namespace Multiplication
                 // ボタンに書かれたテキスト（数字）を取得
                 string buttonText = clickedButton.Text;
 
-                // ここでどのボタンが押されたかに応じた処理を実行
-                // 例: テキストボックスに表示
-                //textBoxDisplay.Text = "押されたボタン: " + buttonText;
+                var val = int.Parse(buttonText);
+
+                var ret = questionSetClass.InputAnswer(val);
+
+                if (ret)
+                {
+                    // PictureBoxを表示してクリック待機を有効化
+                    nextButton.Visible = true;
+                }
+
+
             }
         }
 
@@ -115,6 +144,16 @@ namespace Multiplication
         private void FormMain_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void nextButton_Click(object sender, EventArgs e)
+        {
+
+            nextButton.Visible = false;
+
+            //次の問題へ移行
+            var question = questionSetClass.GetNextQuestion();
+            displayControlClass.RefreshQuestion(question);
         }
     }
 }

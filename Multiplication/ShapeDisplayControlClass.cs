@@ -61,7 +61,8 @@ namespace Multiplication
                 AutoSize = false,
                 Location = labelBaseLocation, // 初期位置
                 Font = new Font("Arial", 130, FontStyle.Bold),
-                BorderStyle = BorderStyle.FixedSingle,
+                //BorderStyle = BorderStyle.FixedSingle,
+                BorderStyle = BorderStyle.None,
                 Size = new Size(100, 180),
                 TextAlign = ContentAlignment.MiddleCenter
             };

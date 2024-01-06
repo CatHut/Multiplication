@@ -21,11 +21,19 @@ namespace Multiplication
         /// </summary>
         public int LowerLevel { get; private set; }
 
+        private QuestionClass CurrentQuestion { get; set; }
+        private int InputIndex { get; set; }
+        private int Answer { get; set; }
 
-        public QuestionSetClass(int lower, int upper)
+        private DisplayControlClass DisplayControlClass { get; set; }
+
+
+        public QuestionSetClass(int lower, int upper, DisplayControlClass displayControlClass)
         {
             UpperLevel = upper;
             LowerLevel = lower;
+
+            DisplayControlClass = displayControlClass;
 
             Questions = new Queue<QuestionClass>();
             GenerateQuestionSet();
@@ -77,13 +85,32 @@ namespace Multiplication
 
             if (Questions.Count > 0)
             {
-                return Questions.Dequeue();
+                CurrentQuestion = Questions.Dequeue();
+                InputIndex = CurrentQuestion.AnswerValue.ToString().Length;
+                return CurrentQuestion;
             }
             else
             {
                 // キューが空の場合の処理
                 return null;
             }
+        }
+
+        public bool InputAnswer(int val)
+        {
+            InputIndex--;
+            Answer += val * ((int)(Math.Pow(10, InputIndex) + 0.5f));
+            DisplayControlClass.AnswerValue[InputIndex].SetDisplay(DisplayMode.B, val);
+
+            if(InputIndex <= 0)
+            {
+                //入力完了
+                return true;
+            }
+
+            //入力継続
+            DisplayControlClass.AnswerValue[InputIndex - 1].SetDisplay(DisplayMode.A, val);
+            return false;
         }
 
     }

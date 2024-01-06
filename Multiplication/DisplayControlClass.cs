@@ -29,9 +29,9 @@ namespace Multiplication
         private int SingleWidth = 130;
         private int Padding = 10;
 
-        List<ShapeDisplayControlClass> FirstValue = new List<ShapeDisplayControlClass>();
-        List<ShapeDisplayControlClass> SecondValue = new List<ShapeDisplayControlClass>();
-        List<ShapeDisplayControlClass> AnswerValue = new List<ShapeDisplayControlClass>();
+        private List<ShapeDisplayControlClass> FirstValue = new List<ShapeDisplayControlClass>();
+        private List<ShapeDisplayControlClass> SecondValue = new List<ShapeDisplayControlClass>();
+        public List<ShapeDisplayControlClass> AnswerValue = new List<ShapeDisplayControlClass>();
         private Form form;
 
         public DisplayControlClass(Form form)
