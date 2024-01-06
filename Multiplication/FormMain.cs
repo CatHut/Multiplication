@@ -28,7 +28,7 @@ namespace Multiplication
 
             //ñ‚ëËÇÃê∂ê¨
             {
-                questionSetClass = new QuestionSetClass(7, 9);
+                questionSetClass = new QuestionSetClass(90, 99);
 
             }
 

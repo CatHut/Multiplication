@@ -15,7 +15,8 @@ namespace Multiplication
         Ones = 0,
         Tens = 1,
         Hundreds = 2,
-        Thousands = 3
+        Thousands = 3,
+        All = 4
     }
 
 
@@ -23,7 +24,10 @@ namespace Multiplication
     {
         private readonly Point FirstValueBasePoint = new Point(30, 100);
         private readonly Point SecondValueBasePoint = new Point(400, 100);
-        private readonly Point AnswerValueBasePoint = new Point(700, 100);
+        private readonly Point AnswerValueBasePoint = new Point(800, 100);
+
+        private int SingleWidth = 130;
+        private int Padding = 10;
 
         List<ShapeDisplayControlClass> FirstValue = new List<ShapeDisplayControlClass>();
         List<ShapeDisplayControlClass> SecondValue = new List<ShapeDisplayControlClass>();
@@ -35,16 +39,16 @@ namespace Multiplication
             this.form = form;
 
 
-            FirstValue.Add(new ShapeDisplayControlClass(form, new Point(FirstValueBasePoint.X + 10 + 130, FirstValueBasePoint.Y)));
-            FirstValue.Add(new ShapeDisplayControlClass(form, new Point(FirstValueBasePoint.X + 10, FirstValueBasePoint.Y)));
+            FirstValue.Add(new ShapeDisplayControlClass(form, new Point(FirstValueBasePoint.X + Padding + SingleWidth, FirstValueBasePoint.Y)));
+            FirstValue.Add(new ShapeDisplayControlClass(form, new Point(FirstValueBasePoint.X + Padding, FirstValueBasePoint.Y)));
 
-            SecondValue.Add(new ShapeDisplayControlClass(form, new Point(SecondValueBasePoint.X + 10 + 130, SecondValueBasePoint.Y)));
-            SecondValue.Add(new ShapeDisplayControlClass(form, new Point(SecondValueBasePoint.X + 10, SecondValueBasePoint.Y)));
+            SecondValue.Add(new ShapeDisplayControlClass(form, new Point(SecondValueBasePoint.X + Padding + SingleWidth, SecondValueBasePoint.Y)));
+            SecondValue.Add(new ShapeDisplayControlClass(form, new Point(SecondValueBasePoint.X + Padding, SecondValueBasePoint.Y)));
 
-            AnswerValue.Add(new ShapeDisplayControlClass(form, new Point(AnswerValueBasePoint.X + 10 + 130 + 130 + 130, AnswerValueBasePoint.Y)));
-            AnswerValue.Add(new ShapeDisplayControlClass(form, new Point(AnswerValueBasePoint.X + 10 + 130 + 130, AnswerValueBasePoint.Y)));
-            AnswerValue.Add(new ShapeDisplayControlClass(form, new Point(AnswerValueBasePoint.X + 10 + 130, AnswerValueBasePoint.Y)));
-            AnswerValue.Add(new ShapeDisplayControlClass(form, new Point(AnswerValueBasePoint.X + 10, AnswerValueBasePoint.Y)));
+            AnswerValue.Add(new ShapeDisplayControlClass(form, new Point(AnswerValueBasePoint.X + Padding + SingleWidth + SingleWidth + SingleWidth, AnswerValueBasePoint.Y)));
+            AnswerValue.Add(new ShapeDisplayControlClass(form, new Point(AnswerValueBasePoint.X + Padding + SingleWidth + SingleWidth, AnswerValueBasePoint.Y)));
+            AnswerValue.Add(new ShapeDisplayControlClass(form, new Point(AnswerValueBasePoint.X + Padding + SingleWidth, AnswerValueBasePoint.Y)));
+            AnswerValue.Add(new ShapeDisplayControlClass(form, new Point(AnswerValueBasePoint.X + Padding, AnswerValueBasePoint.Y)));
 
 
 
@@ -52,6 +56,7 @@ namespace Multiplication
 
         public void RefreshQuestion(QuestionClass question)
         {
+            //第１項表示
             {
                 var val = question.FirstValue;
                 var ones = val % 10;
@@ -68,6 +73,7 @@ namespace Multiplication
 
             }
 
+            //第２項表示
             {
                 var val = question.SecondValue;
                 var ones = val % 10;
@@ -85,6 +91,7 @@ namespace Multiplication
                 }
             }
 
+            //回答表示
             {
                 var val = question.AnswerValue;
                 RefreshAnswerValue(val);
@@ -131,6 +138,18 @@ namespace Multiplication
                 int digitValue = (val / (int)Math.Pow(10, i)) % 10;
 
                 AnswerValue[(int)places[i]].SetDisplay(mode, digitValue);
+            }
+
+            LeftJustificationAnswerValue(val);
+        }
+
+        private void LeftJustificationAnswerValue(int val)
+        {
+            int numberOfDigits = val.ToString().Length; // valの桁数を計算
+
+            for(int i = 0; i < numberOfDigits; i++)
+            {
+                AnswerValue[i].BaseLocation = new Point(AnswerValueBasePoint.X + Padding + SingleWidth * (numberOfDigits - i - 1), AnswerValueBasePoint.Y);
             }
         }
 

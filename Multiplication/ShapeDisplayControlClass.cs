@@ -6,6 +6,7 @@ using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 using CatHut;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Multiplication
 {
@@ -31,6 +32,8 @@ namespace Multiplication
         private Form form;
         private Point baseLocation; // 基準位置
         private Point labelBaseLocation = new Point(15, 10); // 初期位置
+        private DisplayMode displayMode;
+        private int Number;
 
         /// <summary>
         /// ShapeDisplayControlの基準位置を設定または取得します。
@@ -41,7 +44,7 @@ namespace Multiplication
             set
             {
                 baseLocation = value;
-                UpdateChildControls(); // 子要素の位置を更新
+                SetDisplay(displayMode, Number);
             }
         }
 
@@ -81,6 +84,7 @@ namespace Multiplication
         /// </summary>
         private void UpdateChildControls()
         {
+
             foreach (var shape in shapeDrawer.Shapes)
             {
                 shape.Location = new Point(baseLocation.X + shape.Location.X, baseLocation.Y + shape.Location.Y);
@@ -100,8 +104,10 @@ namespace Multiplication
         {
             shapeDrawer.ClearShapes(); // 現在の図形をすべてクリア
             numberLabel.Visible = false; // ラベルを非表示に設定
-            var str = number.ToString();
-            switch (mode)
+            displayMode = mode;
+            Number = number;
+            var str = Number.ToString();
+            switch (displayMode)
             {
                 case DisplayMode.A:
                     shapeDrawer.AddShape(new Triangle(new Point(35, -70), new Size(50, 30), false, TriangleDirection.Down)); //上部矢印
