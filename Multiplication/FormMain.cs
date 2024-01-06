@@ -7,6 +7,7 @@ namespace Multiplication
         private List<Button> buttons = new List<Button>();
         private DisplayControlClass displayControlClass;
         private AppSetting<AnswerDataClass> AS;
+        private QuestionSetClass questionSetClass;
 
 
         public FormMain()
@@ -27,14 +28,13 @@ namespace Multiplication
 
             //問題の生成
             {
+                questionSetClass = new QuestionSetClass(7, 9);
 
             }
 
             //問題表示用のアイテム追加
             {
                 displayControlClass = new DisplayControlClass(this);
-                //displayControlClass.Update();
-
             }
 
 
@@ -72,6 +72,14 @@ namespace Multiplication
                 //button.Click += new EventHandler(Button_Click); // イベントハンドラーの登録
                 //this.Controls.Add(button);
                 //button.BringToFront();
+
+            }
+
+
+            //最初の問題表示
+            {
+                var question = questionSetClass.GetNextQuestion();
+                displayControlClass.RefreshQuestion(question);
 
             }
         }

@@ -21,6 +21,10 @@ namespace Multiplication
 
     public class DisplayControlClass
     {
+        private readonly Point FirstValueBasePoint = new Point(30, 100);
+        private readonly Point SecondValueBasePoint = new Point(400, 100);
+        private readonly Point AnswerValueBasePoint = new Point(700, 100);
+
         List<ShapeDisplayControlClass> FirstValue = new List<ShapeDisplayControlClass>();
         List<ShapeDisplayControlClass> SecondValue = new List<ShapeDisplayControlClass>();
         List<ShapeDisplayControlClass> AnswerValue = new List<ShapeDisplayControlClass>();
@@ -30,9 +34,6 @@ namespace Multiplication
         {
             this.form = form;
 
-            Point FirstValueBasePoint = new Point(30, 100);
-            Point SecondValueBasePoint = new Point(400, 100);
-            Point AnswerValueBasePoint = new Point(700, 100);
 
             FirstValue.Add(new ShapeDisplayControlClass(form, new Point(FirstValueBasePoint.X + 10 + 130, FirstValueBasePoint.Y)));
             FirstValue.Add(new ShapeDisplayControlClass(form, new Point(FirstValueBasePoint.X + 10, FirstValueBasePoint.Y)));
@@ -45,12 +46,49 @@ namespace Multiplication
             AnswerValue.Add(new ShapeDisplayControlClass(form, new Point(AnswerValueBasePoint.X + 10 + 130, AnswerValueBasePoint.Y)));
             AnswerValue.Add(new ShapeDisplayControlClass(form, new Point(AnswerValueBasePoint.X + 10, AnswerValueBasePoint.Y)));
 
-            SetFirstValue(15);
+
 
         }
 
         public void RefreshQuestion(QuestionClass question)
         {
+            {
+                var val = question.FirstValue;
+                var ones = val % 10;
+                var tens = val / 10;
+                FirstValue[(int)NumberPlace.Ones].SetDisplay(DisplayMode.D, ones);
+                if (tens == 0)
+                {
+                    FirstValue[(int)NumberPlace.Tens].SetDisplay(DisplayMode.E, tens);
+                }
+                else
+                {
+                    FirstValue[(int)NumberPlace.Tens].SetDisplay(DisplayMode.D, tens);
+                }
+
+            }
+
+            {
+                var val = question.SecondValue;
+                var ones = val % 10;
+                var tens = val / 10;
+
+                SecondValue[(int)NumberPlace.Ones].SetDisplay(DisplayMode.D, ones);
+
+                if (tens == 0)
+                {
+                    SecondValue[(int)NumberPlace.Tens].SetDisplay(DisplayMode.E, tens);
+                }
+                else
+                {
+                    SecondValue[(int)NumberPlace.Tens].SetDisplay(DisplayMode.D, tens);
+                }
+            }
+
+            {
+                var val = question.AnswerValue;
+                RefreshAnswerValue(val);
+            }
         }
 
         public void Draw(Graphics g)
@@ -73,8 +111,27 @@ namespace Multiplication
 
         private void SetFirstValue(int val)
         {
-            FirstValue[(int)NumberPlace.Ones].SetDisplay(DisplayMode.A, val % 10);
-            FirstValue[(int)NumberPlace.Tens].SetDisplay(DisplayMode.A, val / 10);
+        }
+
+        private void SetAnswerValue(int val)
+        {
+
+        }
+
+        private void RefreshAnswerValue(int val)
+        {
+            int numberOfDigits = val.ToString().Length; // valの桁数を計算
+            NumberPlace[] places = { NumberPlace.Ones, NumberPlace.Tens, NumberPlace.Hundreds, NumberPlace.Thousands };
+
+            for (int i = 0; i < places.Length; i++)
+            {
+                DisplayMode mode = ((i + 1) == numberOfDigits) ? DisplayMode.A : DisplayMode.C;
+                if((i + 1) > numberOfDigits) { mode = DisplayMode.E; }
+
+                int digitValue = (val / (int)Math.Pow(10, i)) % 10;
+
+                AnswerValue[(int)places[i]].SetDisplay(mode, digitValue);
+            }
         }
 
     }

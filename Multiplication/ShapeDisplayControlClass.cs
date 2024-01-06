@@ -107,16 +107,16 @@ namespace Multiplication
                     shapeDrawer.AddShape(new Triangle(new Point(35, -70), new Size(50, 30), false, TriangleDirection.Down)); //上部矢印
                     shapeDrawer.AddShape(new Triangle(new Point(35, 220), new Size(50, 30), false, TriangleDirection.Up)); //下部矢印
                     shapeDrawer.AddShape(new CatHut.Rectangle(new Point(0, 0), new Size(120, 200), false));
-                    numberLabel.Text = str;
-                    numberLabel.Visible = true;
+                    //numberLabel.Text = str;
+                    //numberLabel.Visible = true;
                     break;
                 case DisplayMode.B:
-                    shapeDrawer.AddShape(new CatHut.Rectangle(new Point(0, 0), new Size(50, 100), false));
+                    shapeDrawer.AddShape(new CatHut.Rectangle(new Point(0, 0), new Size(120, 200), false));
                     numberLabel.Text = str;
                     numberLabel.Visible = true;
                     break;
                 case DisplayMode.C:
-                    shapeDrawer.AddShape(new CatHut.Rectangle(new Point(0, 0), new Size(50, 100), false));
+                    shapeDrawer.AddShape(new CatHut.Rectangle(new Point(0, 0), new Size(120, 200), false));
                     break;
                 case DisplayMode.D:
                     numberLabel.Text = str;

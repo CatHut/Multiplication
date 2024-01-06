@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -10,7 +11,7 @@ namespace Multiplication
     public class QuestionSetClass
     {
 
-        public Queue<QuestionClass> Questions { get; private set; }
+        private Queue<QuestionClass> Questions { get; set; }
         /// <summary>
         /// 問題の数値上限
         /// </summary>
@@ -73,22 +74,17 @@ namespace Multiplication
         public QuestionClass GetNextQuestion()
         {
             // 次の問題を取得します。
-            // 空の定義としておきます。
-            return null;
+
+            if (Questions.Count > 0)
+            {
+                return Questions.Dequeue();
+            }
+            else
+            {
+                // キューが空の場合の処理
+                return null;
+            }
         }
 
-        public bool IsQuestionAnswered(int questionIndex)
-        {
-            // 特定の問題が回答されたかどうかをチェックします。
-            // 空の定義としておきます。
-            return false;
-        }
-
-        public bool IsAnswerCorrect(int questionIndex)
-        {
-            // 特定の問題に対する回答が正しいかどうかをチェックします。
-            // 空の定義としておきます。
-            return false;
-        }
     }
 }
