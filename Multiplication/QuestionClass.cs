@@ -25,10 +25,19 @@ namespace Multiplication
             FirstValue = first;
             SecondValue = second;
             AnswerValue = FirstValue * SecondValue;
-            HiddenValue = GetRandomHiddenValueType();
 
             HiddenValue = HiddenValueType.ANSWER_VALUE;
         }
+
+        private void GenerateQuestion(int first, int second, bool isHideRandom)
+        {
+            FirstValue = first;
+            SecondValue = second;
+            AnswerValue = FirstValue * SecondValue;
+            HiddenValue = GetRandomHiddenValueType();
+
+        }
+
 
         /// <summary>
         /// HiddenValueType enumからランダムな値を取得します。

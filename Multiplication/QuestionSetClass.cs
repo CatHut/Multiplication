@@ -37,16 +37,24 @@ namespace Multiplication
 
             DisplayControlClass = displayControlClass;
 
-            Questions = new Queue<QuestionClass>();
             GenerateQuestionSet();
         }
 
+        public void RefreshQuestionSet()
+        {
+            GenerateQuestionSet();
+        }
+
+
         private void GenerateQuestionSet()
         {
+            Questions = Questions ?? new Queue<QuestionClass>();
+            Questions.Clear();
+
             List<Point> temp = new List<Point>();
 
             // 問題セットの生成をここで行います。
-            for(int i = LowerLevel; i < UpperLevel; i++)
+            for (int i = LowerLevel; i < UpperLevel; i++)
             {
                 for (int j = LowerLevel; j < UpperLevel; j++)
                 {
