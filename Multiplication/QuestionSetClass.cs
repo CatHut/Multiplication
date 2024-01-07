@@ -21,9 +21,11 @@ namespace Multiplication
         /// </summary>
         public int LowerLevel { get; private set; }
 
-        private QuestionClass CurrentQuestion { get; set; }
+        public QuestionClass CurrentQuestion { get; set; }
         private int InputIndex { get; set; }
         private int Answer { get; set; }
+
+        private DateTime StartTime { get; set; }
 
         private DisplayControlClass DisplayControlClass { get; set; }
 
@@ -87,6 +89,9 @@ namespace Multiplication
             {
                 CurrentQuestion = Questions.Dequeue();
                 InputIndex = CurrentQuestion.AnswerValue.ToString().Length;
+
+                StartTime = DateTime.Now;
+
                 return CurrentQuestion;
             }
             else
@@ -96,8 +101,10 @@ namespace Multiplication
             }
         }
 
-        public bool InputAnswer(int val)
+        public bool InputAnswer(int val, out TimeRecordClass trc)
         {
+            var now = DateTime.Now;
+
             InputIndex--;
             Answer += val * ((int)(Math.Pow(10, InputIndex) + 0.5f));
             DisplayControlClass.AnswerValue[InputIndex].SetDisplay(DisplayMode.B, val);
@@ -105,11 +112,17 @@ namespace Multiplication
             if(InputIndex <= 0)
             {
                 //入力完了
+                var result = CurrentQuestion.CheckAnswer(Answer);
+                Answer = 0;
+                trc = new TimeRecordClass(now, now - StartTime, result);
+
                 return true;
             }
 
             //入力継続
             DisplayControlClass.AnswerValue[InputIndex - 1].SetDisplay(DisplayMode.A, val);
+
+            trc = null;
             return false;
         }
 

@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\CatHutLib\CatHutLib\CatHutLib\AppSetting.cs" Link="AppSetting.cs" />
     <Compile Include="..\..\CatHutLib\CatHutLib\CatHutLib\Common\SerializableDictionary.cs" Link="SerializableDictionary\SerializableDictionary.cs" />
     <Compile Include="..\..\CatHutLib\CatHutLib\CatHutLib\Common\SerializableKeyValuePair.cs" Link="SerializableDictionary\SerializableKeyValuePair.cs" />
     <Compile Include="..\..\CatHutLib\CatHutLib\CatHutLib\Common\SerializableSortedDictionary.cs" Link="SerializableDictionary\SerializableSortedDictionary.cs" />

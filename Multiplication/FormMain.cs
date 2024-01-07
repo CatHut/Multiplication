@@ -12,6 +12,7 @@ namespace Multiplication
         private Timer timer;
         private AppSetting<AnswerDataClass> AS;
         private QuestionSetClass questionSetClass;
+        private Label resultLabel;
         private int totalSeconds = 90;
         private int interval;
 
@@ -26,7 +27,7 @@ namespace Multiplication
 
         private void Initialize()
         {
-            AS = new AppSetting<AnswerDataClass>();
+            AS = new AppSetting<AnswerDataClass>(true);
             if(AS.Data.AnswerData == null)
             {
                 AS.Data.Initialize(); 
@@ -109,6 +110,21 @@ namespace Multiplication
                 displayControlClass.RefreshQuestion(question);
             }
 
+            //結果ラベルの追加
+            {
+                // 正解ラベルの初期化
+                resultLabel = new Label();
+                resultLabel.Text = "正解";
+                resultLabel.Location = new Point(100, 100); // 位置は適宜調整
+                resultLabel.Visible = false; // 初期状態では非表示
+                this.Controls.Add(resultLabel);
+
+                resultLabel.BringToFront();
+
+            }
+
+
+
             //ProgressBarの初期化
             {
                 progressBar = new ProgressBar();
@@ -138,15 +154,23 @@ namespace Multiplication
                 string buttonText = clickedButton.Text;
 
                 var val = int.Parse(buttonText);
+                TimeRecordClass timeRecord;
 
-                var ret = questionSetClass.InputAnswer(val);
+                var ret = questionSetClass.InputAnswer(val, out timeRecord);
 
                 if (ret)
                 {
                     timer.Stop();
 
+                    AS.Data.SetQuestionResult(questionSetClass.CurrentQuestion, timeRecord);
+
                     // PictureBoxを表示してクリック待機を有効化
                     nextButton.Visible = true;
+
+                    //結果表示
+                    var str = timeRecord.IsCorrect ? "OK" : "NG";
+                    resultLabel.Text = str;
+                    resultLabel.Visible = true;
                 }
             }
         }
@@ -194,6 +218,7 @@ namespace Multiplication
         {
 
             nextButton.Visible = false;
+            resultLabel.Visible = false;
 
             //次の問題へ移行
             var question = questionSetClass.GetNextQuestion();
